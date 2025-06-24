@@ -1,0 +1,194 @@
+{% extends "will/wizard/base_wizard.html" %}
+
+{% block wizard_title %}Step 1: Your Information{% endblock %}
+{% block wizard_subtitle %}Please provide your personal information as the testator{% endblock %}
+
+{% block wizard_content %}
+<form id="wizard-form" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <!-- Will Title Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-file-text me-2"></i>Will Title</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    {{ form.title.label(class="form-label") }}
+                    {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                    {% if form.title.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">This will be the official title of your will document.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Information Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-person me-2"></i>Personal Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.testator_name.label(class="form-label") }}
+                    {{ form.testator_name(class="form-control" + (" is-invalid" if form.testator_name.errors else "")) }}
+                    {% if form.testator_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.testator_date_of_birth.label(class="form-label") }}
+                    {{ form.testator_date_of_birth(class="form-control" + (" is-invalid" if form.testator_date_of_birth.errors else "")) }}
+                    {% if form.testator_date_of_birth.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_date_of_birth.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.testator_phone.label(class="form-label") }}
+                    {{ form.testator_phone(class="form-control" + (" is-invalid" if form.testator_phone.errors else "")) }}
+                    {% if form.testator_phone.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_phone.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.testator_email.label(class="form-label") }}
+                    {{ form.testator_email(class="form-control" + (" is-invalid" if form.testator_email.errors else "")) }}
+                    {% if form.testator_email.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_email.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Information Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Address Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                {{ form.testator_address.label(class="form-label") }}
+                {{ form.testator_address(class="form-control" + (" is-invalid" if form.testator_address.errors else "")) }}
+                {% if form.testator_address.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.testator_address.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    {{ form.testator_city.label(class="form-label") }}
+                    {{ form.testator_city(class="form-control" + (" is-invalid" if form.testator_city.errors else "")) }}
+                    {% if form.testator_city.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_city.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.testator_state.label(class="form-label") }}
+                    {{ form.testator_state(class="form-control" + (" is-invalid" if form.testator_state.errors else "")) }}
+                    {% if form.testator_state.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_state.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form.testator_zip.label(class="form-label") }}
+                    {{ form.testator_zip(class="form-control" + (" is-invalid" if form.testator_zip.errors else "")) }}
+                    {% if form.testator_zip.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_zip.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.testator_country.label(class="form-label") }}
+                    {{ form.testator_country(class="form-control" + (" is-invalid" if form.testator_country.errors else "")) }}
+                    {% if form.testator_country.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.testator_country.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marital Status Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-heart me-2"></i>Marital Status</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.marital_status.label(class="form-label") }}
+                    {{ form.marital_status(class="form-select" + (" is-invalid" if form.marital_status.errors else "")) }}
+                    {% if form.marital_status.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.marital_status.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.spouse_name.label(class="form-label") }}
+                    {{ form.spouse_name(class="form-control" + (" is-invalid" if form.spouse_name.errors else "")) }}
+                    {% if form.spouse_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.spouse_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">Only required if married or in a domestic partnership.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show/hide spouse name field based on marital status
+    const maritalStatus = document.getElementById('marital_status');
+    const spouseNameGroup = document.querySelector('#spouse_name').closest('.col-md-6');
+    
+    function toggleSpouseName() {
+        const value = maritalStatus.value;
+        if (value === 'married' || value === 'domestic_partnership') {
+            spouseNameGroup.style.display = 'block';
+        } else {
+            spouseNameGroup.style.display = 'none';
+            document.getElementById('spouse_name').value = '';
+        }
+    }
+    
+    maritalStatus.addEventListener('change', toggleSpouseName);
+    toggleSpouseName(); // Initial call
+});
+</script>
+{% endblock %}

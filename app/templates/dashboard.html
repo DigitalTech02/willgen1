@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - WillGen{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Light Gradient -->
+<div class="bg-gradient-primary py-5" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="fade-in">
+                    <h1 class="display-4 fw-bold text-gray-800 mb-3">
+                        Welcome back, {{ current_user.name }}! 👋
+                    </h1>
+                    <p class="lead text-gray-600 mb-0">
+                        Manage your wills, track progress, and create professional legal documents with ease.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                <div class="slide-in">
+                    <a href="{{ url_for('main.create_will') }}" class="btn btn-primary btn-lg shadow-lg px-4 py-3">
+                        <i class="bi bi-plus-circle me-2"></i>Create New Will
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    <!-- Stats Cards with Light Colors -->
+    <div class="row mb-5 g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-primary-700 fw-semibold mb-2">Total Wills</h6>
+                            <h2 class="mb-0 text-primary-800 fw-bold">{{ wills|length }}</h2>
+                            <small class="text-primary-600">All documents</small>
+                        </div>
+                        <div class="bg-primary-100 rounded-circle p-3">
+                            <i class="bi bi-file-text fs-2 text-primary-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-success-700 fw-semibold mb-2">Completed</h6>
+                            <h2 class="mb-0 text-success-800 fw-bold">{{ wills|selectattr('is_completed')|list|length }}</h2>
+                            <small class="text-success-600">Ready to download</small>
+                        </div>
+                        <div class="bg-success-100 rounded-circle p-3">
+                            <i class="bi bi-check-circle fs-2 text-success-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-amber-700 fw-semibold mb-2">In Progress</h6>
+                            <h2 class="mb-0 text-amber-800 fw-bold">{{ wills|rejectattr('is_completed')|list|length }}</h2>
+                            <small class="text-amber-600">Continue editing</small>
+                        </div>
+                        <div class="bg-amber-100 rounded-circle p-3">
+                            <i class="bi bi-clock fs-2 text-amber-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wills List with Modern Design -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1 text-gray-800 fw-bold">Your Wills</h5>
+                            <p class="text-gray-600 mb-0 small">Manage and track your legal documents</p>
+                        </div>
+                        {% if wills %}
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-light text-gray-700 px-3 py-2">
+                                {{ wills|length }} will{{ 's' if wills|length != 1 else '' }}
+                            </span>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="location.reload()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if wills %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+                                <tr>
+                                    <th class="border-0 py-3 px-4 fw-semibold text-gray-700">
+                                        <i class="bi bi-file-text me-2 text-primary"></i>Title
+                                    </th>
+                                    <th class="border-0 py-3 px-4 fw-semibold text-gray-700">
+                                        <i class="bi bi-person me-2 text-primary"></i>Testator
+                                    </th>
+                                    <th class="border-0 py-3 px-4 fw-semibold text-gray-700">
+                                        <i class="bi bi-check-circle me-2 text-primary"></i>Status
+                                    </th>
+                                    <th class="border-0 py-3 px-4 fw-semibold text-gray-700">
+                                        <i class="bi bi-clock me-2 text-primary"></i>Last Updated
+                                    </th>
+                                    <th class="border-0 py-3 px-4 fw-semibold text-gray-700">
+                                        <i class="bi bi-gear me-2 text-primary"></i>Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for will in wills %}
+                                <tr class="border-bottom" style="border-color: #f1f5f9 !important;">
+                                    <td class="py-4 px-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary-50 rounded-circle p-2 me-3">
+                                                <i class="bi bi-file-text text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1 fw-semibold text-gray-800">{{ will.title or 'Untitled Will' }}</h6>
+                                                <small class="text-gray-500">Will Document</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle me-2 text-gray-400"></i>
+                                            <span class="text-gray-700 fw-medium">{{ will.testator_name or 'Not specified' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        {% if will.is_completed %}
+                                        <span class="badge rounded-pill px-3 py-2" style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;">
+                                            <i class="bi bi-check-circle me-1"></i>Completed
+                                        </span>
+                                        {% else %}
+                                        <span class="badge rounded-pill px-3 py-2" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+                                            <i class="bi bi-clock me-1"></i>In Progress
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-calendar3 me-2 text-gray-400"></i>
+                                            <div>
+                                                <div class="text-gray-700 fw-medium">
+                                                    {{ will.updated_at.strftime('%b %d, %Y') if will.updated_at else 'Never' }}
+                                                </div>
+                                                <small class="text-gray-500">
+                                                    {{ will.updated_at.strftime('%I:%M %p') if will.updated_at else '' }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ url_for('main.edit_will', will_id=will.id) }}"
+                                               class="btn btn-sm rounded-pill px-3"
+                                               style="background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe;"
+                                               title="Edit Will">
+                                                <i class="bi bi-pencil me-1"></i>Edit
+                                            </a>
+                                            {% if will.is_completed %}
+                                            <a href="{{ url_for('main.view_will', will_id=will.id) }}"
+                                               class="btn btn-sm rounded-pill px-3"
+                                               style="background: #f0f9ff; color: #0c4a6e; border: 1px solid #bae6fd;"
+                                               title="View Will">
+                                                <i class="bi bi-eye me-1"></i>View
+                                            </a>
+                                            <a href="{{ url_for('main.download_will_pdf', will_id=will.id) }}"
+                                               class="btn btn-sm rounded-pill px-3"
+                                               style="background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;"
+                                               title="Download PDF">
+                                                <i class="bi bi-download me-1"></i>PDF
+                                            </a>
+                                            {% endif %}
+                                            <button class="btn btn-sm rounded-pill px-3"
+                                                    style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;"
+                                                    onclick="deleteWill({{ will.id }}, '{{ will.title or 'Untitled Will' }}')"
+                                                    title="Delete Will">
+                                                <i class="bi bi-trash me-1"></i>Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <!-- Empty State -->
+                    <div class="text-center py-5">
+                        <i class="bi bi-file-text display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted mb-3">No Wills Created Yet</h4>
+                        <p class="text-muted mb-4">Get started by creating your first will. It only takes a few minutes!</p>
+                        <a href="{{ url_for('main.create_will') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Create Your First Will
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="willTitle"></span>"?</p>
+                <p class="text-danger"><strong>This action cannot be undone.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete Will</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let willToDelete = null;
+
+function deleteWill(willId, willTitle) {
+    willToDelete = willId;
+    document.getElementById('willTitle').textContent = willTitle;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+document.getElementById('confirmDelete').addEventListener('click', function() {
+    if (willToDelete) {
+        fetch(`/will/delete/${willToDelete}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error deleting will: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting will');
+        });
+    }
+});
+</script>
+{% endblock %}

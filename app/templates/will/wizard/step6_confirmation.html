@@ -1,0 +1,236 @@
+{% extends "will/wizard/base_wizard.html" %}
+
+{% block wizard_title %}Step 6: Review & Confirmation{% endblock %}
+{% block wizard_subtitle %}Review your will and confirm all information is correct{% endblock %}
+
+{% block wizard_content %}
+<form id="wizard-form" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <!-- Will Summary -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-file-text me-2"></i>Will Summary</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">Testator Information</h6>
+                    <p><strong>Name:</strong> {{ will.testator_name or 'Not specified' }}</p>
+                    <p><strong>Address:</strong> {{ will.testator_address or 'Not specified' }}</p>
+                    <p><strong>City, State ZIP:</strong> 
+                       {{ will.testator_city or '' }}{% if will.testator_city and will.testator_state %}, {% endif %}{{ will.testator_state or '' }} {{ will.testator_zip or '' }}
+                    </p>
+                    {% if will.marital_status %}
+                    <p><strong>Marital Status:</strong> {{ will.marital_status.title() }}</p>
+                    {% endif %}
+                    {% if will.spouse_name %}
+                    <p><strong>Spouse:</strong> {{ will.spouse_name }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary">Primary Executor</h6>
+                    <p><strong>Name:</strong> {{ will.primary_executor_name or 'Not specified' }}</p>
+                    <p><strong>Relationship:</strong> {{ will.primary_executor_relationship or 'Not specified' }}</p>
+                    {% if will.alternate_executor_name %}
+                    <h6 class="text-primary mt-3">Alternate Executor</h6>
+                    <p><strong>Name:</strong> {{ will.alternate_executor_name }}</p>
+                    <p><strong>Relationship:</strong> {{ will.alternate_executor_relationship or 'Not specified' }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beneficiaries Summary -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-people me-2"></i>Beneficiaries</h5>
+        </div>
+        <div class="card-body">
+            {% if will.beneficiaries %}
+                {% set beneficiaries_data = will.beneficiaries | from_json %}
+                {% if beneficiaries_data %}
+                    <div class="row">
+                        {% for beneficiary in beneficiaries_data %}
+                        <div class="col-md-6 mb-3">
+                            <div class="border rounded p-3">
+                                <h6 class="text-primary">{{ beneficiary.name }}</h6>
+                                <p class="mb-1"><strong>Relationship:</strong> {{ beneficiary.relationship }}</p>
+                                {% if beneficiary.percentage %}
+                                <p class="mb-1"><strong>Share:</strong> {{ beneficiary.percentage }}</p>
+                                {% endif %}
+                                {% if beneficiary.contingent %}
+                                <span class="badge bg-warning">Contingent</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No beneficiaries specified.</p>
+                {% endif %}
+            {% else %}
+                <p class="text-muted">No beneficiaries specified.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Assets Summary -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-bank me-2"></i>Assets Overview</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    {% if will.real_estate_properties %}
+                        {% set real_estate = will.real_estate_properties | from_json %}
+                        {% if real_estate %}
+                        <h6 class="text-primary">Real Estate</h6>
+                        <ul class="list-unstyled">
+                            {% for property in real_estate %}
+                            <li>• {{ property.description }}{% if property.value %} ({{ property.value }}){% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if will.bank_accounts %}
+                        {% set accounts = will.bank_accounts | from_json %}
+                        {% if accounts %}
+                        <h6 class="text-primary">Bank Accounts</h6>
+                        <ul class="list-unstyled">
+                            {% for account in accounts %}
+                            <li>• {{ account.description }}{% if account.value %} ({{ account.value }}){% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    {% if will.investments %}
+                        {% set investments = will.investments | from_json %}
+                        {% if investments %}
+                        <h6 class="text-primary">Investments</h6>
+                        <ul class="list-unstyled">
+                            {% for investment in investments %}
+                            <li>• {{ investment.description }}{% if investment.value %} ({{ investment.value }}){% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if will.residuary_beneficiary %}
+                    <h6 class="text-primary">Residuary Beneficiary</h6>
+                    <p>{{ will.residuary_beneficiary }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Instructions Summary -->
+    {% if will.funeral_wishes or will.guardian_minor_children or will.special_instructions %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-heart me-2"></i>Special Instructions</h5>
+        </div>
+        <div class="card-body">
+            {% if will.funeral_wishes %}
+            <h6 class="text-primary">Funeral Wishes</h6>
+            <p>{{ will.funeral_wishes }}</p>
+            {% endif %}
+            
+            {% if will.guardian_minor_children %}
+            <h6 class="text-primary">Guardian for Minor Children</h6>
+            <p>{{ will.guardian_minor_children }}</p>
+            {% endif %}
+            
+            {% if will.special_instructions %}
+            <h6 class="text-primary">Additional Instructions</h6>
+            <p>{{ will.special_instructions }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Confirmation Checkboxes -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-check-circle me-2"></i>Final Confirmation</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Important:</strong> Please review all information carefully. Once completed, this will become your official will document.
+            </div>
+            
+            <div class="form-check mb-3">
+                {{ form.confirm_accuracy(class="form-check-input" + (" is-invalid" if form.confirm_accuracy.errors else "")) }}
+                {{ form.confirm_accuracy.label(class="form-check-label") }}
+                {% if form.confirm_accuracy.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_accuracy.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-check mb-3">
+                {{ form.confirm_legal_capacity(class="form-check-input" + (" is-invalid" if form.confirm_legal_capacity.errors else "")) }}
+                {{ form.confirm_legal_capacity.label(class="form-check-label") }}
+                {% if form.confirm_legal_capacity.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_legal_capacity.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-check mb-3">
+                {{ form.confirm_understanding(class="form-check-input" + (" is-invalid" if form.confirm_understanding.errors else "")) }}
+                {{ form.confirm_understanding.label(class="form-check-label") }}
+                {% if form.confirm_understanding.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_understanding.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Steps Information -->
+    <div class="card mb-4 bg-light">
+        <div class="card-header">
+            <h6 class="mb-0"><i class="bi bi-info-circle me-2"></i>Next Steps After Completion</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-success">What happens next:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Your will is saved and marked as completed</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>You can download a PDF copy</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>You can make changes anytime</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Your data remains secure and private</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-warning">Important reminders:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Print and sign the document</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Have it witnessed and notarized</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Store in a safe place</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Inform your executor of its location</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block wizard_navigation %}
+<button type="submit" form="wizard-form" class="btn btn-success btn-lg">
+    <i class="bi bi-check-circle me-2"></i>Complete My Will
+</button>
+{% endblock %}

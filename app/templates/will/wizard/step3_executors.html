@@ -1,0 +1,178 @@
+{% extends "will/wizard/base_wizard.html" %}
+
+{% block wizard_title %}Step 3: Executors{% endblock %}
+{% block wizard_subtitle %}Choose who will carry out the instructions in your will{% endblock %}
+
+{% block wizard_content %}
+<form id="wizard-form" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <!-- Primary Executor Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>Primary Executor</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>The executor</strong> is responsible for carrying out the instructions in your will, 
+                including distributing assets, paying debts, and handling legal matters. Choose someone you trust completely.
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.primary_executor_name.label(class="form-label") }}
+                    {{ form.primary_executor_name(class="form-control" + (" is-invalid" if form.primary_executor_name.errors else "")) }}
+                    {% if form.primary_executor_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.primary_executor_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.primary_executor_relationship.label(class="form-label") }}
+                    {{ form.primary_executor_relationship(class="form-control" + (" is-invalid" if form.primary_executor_relationship.errors else "")) }}
+                    {% if form.primary_executor_relationship.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.primary_executor_relationship.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.primary_executor_address.label(class="form-label") }}
+                {{ form.primary_executor_address(class="form-control" + (" is-invalid" if form.primary_executor_address.errors else "")) }}
+                {% if form.primary_executor_address.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.primary_executor_address.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.primary_executor_phone.label(class="form-label") }}
+                    {{ form.primary_executor_phone(class="form-control" + (" is-invalid" if form.primary_executor_phone.errors else "")) }}
+                    {% if form.primary_executor_phone.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.primary_executor_phone.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.primary_executor_email.label(class="form-label") }}
+                    {{ form.primary_executor_email(class="form-control" + (" is-invalid" if form.primary_executor_email.errors else "")) }}
+                    {% if form.primary_executor_email.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.primary_executor_email.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alternate Executor Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>Alternate Executor <span class="text-muted">(Optional but Recommended)</span></h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Alternate executor</strong> will serve if your primary executor is unable or unwilling to serve. 
+                This provides a backup plan and helps avoid complications.
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.alternate_executor_name.label(class="form-label") }}
+                    {{ form.alternate_executor_name(class="form-control" + (" is-invalid" if form.alternate_executor_name.errors else "")) }}
+                    {% if form.alternate_executor_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.alternate_executor_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.alternate_executor_relationship.label(class="form-label") }}
+                    {{ form.alternate_executor_relationship(class="form-control" + (" is-invalid" if form.alternate_executor_relationship.errors else "")) }}
+                    {% if form.alternate_executor_relationship.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.alternate_executor_relationship.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.alternate_executor_address.label(class="form-label") }}
+                {{ form.alternate_executor_address(class="form-control" + (" is-invalid" if form.alternate_executor_address.errors else "")) }}
+                {% if form.alternate_executor_address.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.alternate_executor_address.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.alternate_executor_phone.label(class="form-label") }}
+                    {{ form.alternate_executor_phone(class="form-control" + (" is-invalid" if form.alternate_executor_phone.errors else "")) }}
+                    {% if form.alternate_executor_phone.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.alternate_executor_phone.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.alternate_executor_email.label(class="form-label") }}
+                    {{ form.alternate_executor_email(class="form-control" + (" is-invalid" if form.alternate_executor_email.errors else "")) }}
+                    {% if form.alternate_executor_email.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.alternate_executor_email.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Executor Guidelines -->
+    <div class="card mb-4 bg-light">
+        <div class="card-header">
+            <h6 class="mb-0"><i class="bi bi-lightbulb me-2"></i>Choosing an Executor - Guidelines</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-success">Good Executor Qualities:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Trustworthy and honest</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Organized and detail-oriented</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Available and willing to serve</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Lives nearby (preferred)</li>
+                        <li><i class="bi bi-check-circle text-success me-2"></i>Younger than you</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-warning">Consider Carefully:</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Family dynamics and conflicts</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Financial responsibility</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Time availability</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Legal/financial knowledge</li>
+                        <li><i class="bi bi-exclamation-triangle text-warning me-2"></i>Emotional capacity</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="alert alert-info mt-3 mb-0">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Professional Executors:</strong> You may also choose a bank, trust company, or attorney as your executor, 
+                especially for complex estates. They charge fees but provide professional expertise.
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

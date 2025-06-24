@@ -1,0 +1,163 @@
+<!-- Modern Progress Indicator for Will Wizard -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-semibold text-gray-700 mb-0">
+                <i class="bi bi-list-check me-2 text-primary"></i>Will Creation Progress
+            </h6>
+            <span class="badge rounded-pill px-3 py-2" style="background: #dbeafe; color: #1e40af;">
+                Step {{ current_step }} of 6
+            </span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress mb-3" style="height: 12px; background: #f1f5f9; border-radius: 10px;">
+            <div class="progress-bar" 
+                 style="width: {{ (current_step / 6 * 100)|round(1) }}%; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-radius: 10px;"
+                 role="progressbar" 
+                 aria-valuenow="{{ (current_step / 6 * 100)|round(1) }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100">
+            </div>
+        </div>
+        
+        <!-- Step Indicators -->
+        <div class="row g-2 text-center">
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 1 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 1 else ('active' if current_step == 1 else 'inactive') }}">
+                        {% if current_step > 1 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>1</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Personal Info</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 2 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 2 else ('active' if current_step == 2 else 'inactive') }}">
+                        {% if current_step > 2 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>2</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Beneficiaries</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 3 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 3 else ('active' if current_step == 3 else 'inactive') }}">
+                        {% if current_step > 3 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>3</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Executors</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 4 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 4 else ('active' if current_step == 4 else 'inactive') }}">
+                        {% if current_step > 4 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>4</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Assets</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 5 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 5 else ('active' if current_step == 5 else 'inactive') }}">
+                        {% if current_step > 5 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>5</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Instructions</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="step-indicator {{ 'active' if current_step >= 6 else 'inactive' }}">
+                    <div class="step-circle {{ 'completed' if current_step > 6 else ('active' if current_step == 6 else 'inactive') }}">
+                        {% if current_step > 6 %}
+                            <i class="bi bi-check"></i>
+                        {% else %}
+                            <span>6</span>
+                        {% endif %}
+                    </div>
+                    <small class="step-label">Review</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.step-circle.inactive {
+    background: #f1f5f9;
+    color: #9ca3af;
+    border: 2px solid #e5e7eb;
+}
+
+.step-circle.active {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: 2px solid #3b82f6;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.2);
+}
+
+.step-circle.completed {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: 2px solid #10b981;
+}
+
+.step-label {
+    font-weight: 500;
+    color: #6b7280;
+    transition: color 0.3s ease;
+}
+
+.step-indicator.active .step-label {
+    color: #374151;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+    
+    .step-label {
+        font-size: 0.75rem;
+    }
+}
+</style>

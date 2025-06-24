@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Last Will and Testament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            margin: 0.5in;
+            color: black;
+        }
+
+        .will-document {
+            width: 100%;
+        }
+        
+        .will-header {
+            text-align: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .will-title {
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .will-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14pt;
+            font-weight: bold;
+            border-bottom: 1px solid black;
+            padding-bottom: 3px;
+            margin-bottom: 10px;
+        }
+
+        .legal-text {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid black;
+            margin: 20px 0 5px 0;
+            height: 1px;
+            width: 250px;
+        }
+
+        .witness-section {
+            margin-top: 25px;
+        }
+
+        .date-location {
+            text-align: right;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .beneficiary-item, .asset-item {
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .info-row {
+            margin-bottom: 8px;
+        }
+
+        .info-left {
+            width: 45%;
+            float: left;
+        }
+
+        .info-right {
+            width: 45%;
+            float: right;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mb-3 { margin-bottom: 12px; }
+
+        .badge {
+            font-size: 9pt;
+            font-weight: bold;
+            background: gray;
+            color: white;
+            padding: 2px 4px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        small {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    <div class="will-document">
+        <!-- Header -->
+        <div class="will-header">
+            <div class="will-title">Last Will and Testament</div>
+            <div style="font-size: 14pt; font-weight: bold;">of {{ will.testator_name or 'Unknown Testator' }}</div>
+        </div>
+
+        <div class="date-location">
+            <strong>Date:</strong> {{ will.created_at.strftime('%B %d, %Y') if will.created_at else 'Not specified' }}<br>
+            <strong>Location:</strong> {{ testator_data.get('address', 'Not specified') if testator_data else 'Not specified' }}
+        </div>
+
+        <!-- Declaration -->
+        <div class="will-section">
+            <div class="section-title">I. Declaration</div>
+            <div class="legal-text">
+                I, <strong>{{ will.testator_name or 'Unknown' }}</strong>, 
+                {% if testator_data and testator_data.get('age') %}
+                    aged {{ testator_data.get('age') }} years,
+                {% endif %}
+                of sound mind and disposing memory, do hereby make, publish, and declare this to be my Last Will and Testament, 
+                hereby revoking all former wills and codicils by me at any time heretofore made.
+            </div>
+        </div>
+
+        <!-- Testator Information -->
+        {% if testator_data %}
+        <div class="will-section">
+            <div class="section-title">II. Testator Information</div>
+            <div class="info-row">
+                <div class="info-left">
+                    <strong>Full Name:</strong> {{ testator_data.get('name', 'Not specified') }}<br>
+                    <strong>Date of Birth:</strong> {{ testator_data.get('date_of_birth', 'Not specified') }}<br>
+                    {% if testator_data.get('age') %}
+                    <strong>Age:</strong> {{ testator_data.get('age') }} years<br>
+                    {% endif %}
+                </div>
+                <div class="info-right">
+                    <strong>Marital Status:</strong> {{ testator_data.get('marital_status', 'Not specified') }}<br>
+                    {% if testator_data.get('spouse_name') %}
+                    <strong>Spouse:</strong> {{ testator_data.get('spouse_name') }}<br>
+                    {% endif %}
+                    <strong>Address:</strong> {{ testator_data.get('address', 'Not specified') }}
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Beneficiaries -->
+        {% if beneficiaries_data %}
+        <div class="will-section">
+            <div class="section-title">III. Beneficiaries</div>
+            <div class="legal-text">
+                I hereby give, devise, and bequeath my estate to the following beneficiaries:
+            </div>
+            {% for beneficiary in beneficiaries_data %}
+            <div class="beneficiary-item">
+                <div class="info-row">
+                    <div class="info-left">
+                        <strong>{{ beneficiary.get('name', 'Unnamed Beneficiary') }}</strong>
+                        {% if beneficiary.get('relationship') %}
+                            ({{ beneficiary.get('relationship') }})
+                        {% endif %}
+                        {% if beneficiary.get('contingent') %}
+                            <span class="badge">Contingent</span>
+                        {% endif %}
+                    </div>
+                    <div class="info-right text-right">
+                        <strong>{{ beneficiary.get('percentage', 'Not specified') }}</strong>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                {% if beneficiary.get('address') %}
+                <div class="mt-2"><strong>Address:</strong> {{ beneficiary.get('address') }}</div>
+                {% endif %}
+                {% if beneficiary.get('specific_bequest') %}
+                <div class="mt-2"><strong>Specific Bequest:</strong> {{ beneficiary.get('specific_bequest') }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Executors -->
+        {% if executors_data %}
+        <div class="will-section">
+            <div class="section-title">IV. Appointment of Executor</div>
+            <div class="legal-text">
+                I hereby nominate and appoint the following person(s) as Executor(s) of this my Last Will and Testament:
+            </div>
+            {% for executor in executors_data %}
+            <div class="beneficiary-item">
+                <div class="info-row">
+                    <div class="info-left">
+                        <strong>{{ executor.get('name', 'Unnamed Executor') }}</strong>
+                        {% if executor.get('relationship') %}
+                            ({{ executor.get('relationship') }})
+                        {% endif %}
+                        {% if executor.get('alternate') %}
+                            <span class="badge">Alternate</span>
+                        {% endif %}
+                    </div>
+                    <div class="info-right">
+                        {% if executor.get('phone') %}
+                        <strong>Phone:</strong> {{ executor.get('phone') }}
+                        {% endif %}
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                {% if executor.get('address') %}
+                <div class="mt-2"><strong>Address:</strong> {{ executor.get('address') }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Assets -->
+        {% if assets_data %}
+        <div class="will-section">
+            <div class="section-title">V. Distribution of Assets</div>
+            <div class="legal-text">
+                I give, devise, and bequeath my assets as follows:
+            </div>
+            
+            {% if assets_data.get('real_estate') %}
+            <div class="asset-item">
+                <strong>Real Estate:</strong><br>
+                {{ assets_data.get('real_estate') }}
+            </div>
+            {% endif %}
+            
+            {% if assets_data.get('bank_accounts') %}
+            <div class="asset-item">
+                <strong>Bank Accounts:</strong><br>
+                {{ assets_data.get('bank_accounts') }}
+            </div>
+            {% endif %}
+            
+            {% if assets_data.get('investments') %}
+            <div class="asset-item">
+                <strong>Investments:</strong><br>
+                {{ assets_data.get('investments') }}
+            </div>
+            {% endif %}
+            
+            {% if assets_data.get('personal_property') %}
+            <div class="asset-item">
+                <strong>Personal Property:</strong><br>
+                {{ assets_data.get('personal_property') }}
+            </div>
+            {% endif %}
+            
+            {% if assets_data.get('other_assets') %}
+            <div class="asset-item">
+                <strong>Other Assets:</strong><br>
+                {{ assets_data.get('other_assets') }}
+            </div>
+            {% endif %}
+            
+            {% if assets_data.get('residuary_beneficiary') %}
+            <div class="legal-text mt-3">
+                <strong>Residuary Clause:</strong> All the rest, residue, and remainder of my estate, 
+                I give, devise, and bequeath to <strong>{{ assets_data.get('residuary_beneficiary') }}</strong>.
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Special Instructions -->
+        {% if special_instructions_data %}
+        <div class="will-section">
+            <div class="section-title">VI. Special Instructions</div>
+            
+            {% if special_instructions_data.get('funeral_wishes') %}
+            <div class="legal-text">
+                <strong>Funeral and Burial Instructions:</strong><br>
+                {{ special_instructions_data.get('funeral_wishes') }}
+            </div>
+            {% endif %}
+            
+            {% if special_instructions_data.get('guardian_minor_children') %}
+            <div class="legal-text">
+                <strong>Guardian for Minor Children:</strong><br>
+                {{ special_instructions_data.get('guardian_minor_children') }}
+            </div>
+            {% endif %}
+            
+            {% if special_instructions_data.get('charitable_donations') %}
+            <div class="legal-text">
+                <strong>Charitable Donations:</strong><br>
+                {{ special_instructions_data.get('charitable_donations') }}
+            </div>
+            {% endif %}
+            
+            {% if special_instructions_data.get('additional_instructions') %}
+            <div class="legal-text">
+                <strong>Additional Instructions:</strong><br>
+                {{ special_instructions_data.get('additional_instructions') }}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <div class="section-title">VII. Execution</div>
+            <div class="legal-text">
+                IN WITNESS WHEREOF, I have hereunto set my hand and seal this 
+                _____ day of _____________, 20____.
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="signature-line"></div>
+                    <div class="text-center">
+                        <strong>{{ will.testator_name or 'Testator Name' }}</strong><br>
+                        <small>Testator</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="witness-section">
+                <div class="legal-text">
+                    The foregoing instrument was signed, sealed, published, and declared by the above-named Testator
+                    as and for his/her Last Will and Testament in the presence of us, who, at his/her request,
+                    in his/her presence, and in the presence of each other, have hereunto subscribed our names as witnesses.
+                </div>
+
+                <div class="info-row mt-4">
+                    <div class="info-left">
+                        <div class="signature-line"></div>
+                        <div class="text-center">
+                            <strong>Witness 1</strong><br>
+                            <small>Print Name</small>
+                        </div>
+                        <div class="mt-3">
+                            <small>Address: _________________________</small><br>
+                            <small>_____________________________________</small>
+                        </div>
+                    </div>
+                    <div class="info-right">
+                        <div class="signature-line"></div>
+                        <div class="text-center">
+                            <strong>Witness 2</strong><br>
+                            <small>Print Name</small>
+                        </div>
+                        <div class="mt-3">
+                            <small>Address: _________________________</small><br>
+                            <small>_____________________________________</small>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-5 text-muted">
+            <small>
+                This document was generated on {{ current_date.strftime('%B %d, %Y') }} using WillGen.<br>
+                Please consult with a qualified attorney before executing this will.
+            </small>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Logged Out - WillGen{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="card-title text-success mb-3">Successfully Logged Out</h2>
+                    
+                    <p class="card-text mb-4">
+                        You have been logged out of WillGen successfully. Your session has been cleared.
+                    </p>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>For complete security:</strong> Close your browser or clear your browser cache 
+                        to ensure you're fully logged out from Google as well.
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Return to Home
+                        </a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-google me-2"></i>Login Again
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Aggressive session clearing
+try {
+    // Clear all storage
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Clear specific OAuth items
+    localStorage.removeItem('google_oauth_token');
+    localStorage.removeItem('user_session');
+    sessionStorage.removeItem('google_oauth_token');
+    sessionStorage.removeItem('user_session');
+
+    // Clear any Google-related items
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('google') || key.includes('oauth') || key.includes('auth'))) {
+            localStorage.removeItem(key);
+        }
+    }
+
+    for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i);
+        if (key && (key.includes('google') || key.includes('oauth') || key.includes('auth'))) {
+            sessionStorage.removeItem(key);
+        }
+    }
+} catch (e) {
+    console.log('Storage clearing error:', e);
+}
+
+// Force a hard reload to clear any cached state
+setTimeout(function() {
+    // Use replace to avoid back button issues
+    window.location.replace('{{ url_for("main.index") }}');
+}, 2000); // Redirect to home after 2 seconds
+
+// Also clear any cached authentication state
+if (window.gapi && window.gapi.auth2) {
+    try {
+        const authInstance = window.gapi.auth2.getAuthInstance();
+        if (authInstance) {
+            authInstance.signOut();
+        }
+    } catch (e) {
+        console.log('Google auth signout error:', e);
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Create Will - WillGen{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="py-5" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="fade-in">
+                    <div class="bg-primary-100 rounded-circle d-inline-flex p-3 mb-4">
+                        <i class="bi bi-file-text fs-2 text-primary"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold text-gray-800 mb-3">Create Your Will</h1>
+                    <p class="lead text-gray-600 mb-4">
+                        Follow our simple 6-step process to create a professional, legally-formatted will document.
+                    </p>
+                    <div class="d-flex justify-content-center gap-4 text-sm text-gray-500">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-shield-check me-2 text-success"></i>Secure & Private
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-download me-2 text-primary"></i>PDF Download
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock me-2 text-warning"></i>Save Progress
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Enhanced Progress Bar -->
+            <div class="card border-0 shadow-sm mb-5">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-semibold text-gray-700 mb-0">Progress</h6>
+                        <span class="badge bg-primary-100 text-primary px-3 py-2">Step 1 of 6</span>
+                    </div>
+                    <div class="progress" style="height: 12px; background: #f1f5f9;">
+                        <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: 16.67%"
+                             aria-valuenow="16.67" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <small class="text-gray-500">Personal Info</small>
+                        <small class="text-gray-400">Beneficiaries</small>
+                        <small class="text-gray-400">Executors</small>
+                        <small class="text-gray-400">Assets</small>
+                        <small class="text-gray-400">Instructions</small>
+                        <small class="text-gray-400">Review</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Will Form -->
+            <form id="willForm" class="needs-validation" novalidate>
+                <!-- Step 1: Personal Information -->
+                <div class="card border-0 shadow-sm mb-5 form-step fade-in" data-step="1">
+                    <div class="card-header bg-white border-bottom py-4">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary-100 rounded-circle p-2 me-3">
+                                <i class="bi bi-person text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-bold text-gray-800">Step 1: Personal Information</h5>
+                                <p class="mb-0 text-gray-600 small">Tell us about yourself</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="willTitle" class="form-label fw-semibold text-gray-700">
+                                    <i class="bi bi-file-text me-2 text-primary"></i>Will Title
+                                </label>
+                                <div class="input-group-icon">
+                                    <input type="text" class="form-control" id="willTitle" name="title"
+                                           placeholder="e.g., John Doe's Last Will and Testament" required>
+                                    <i class="bi bi-file-text input-icon"></i>
+                                </div>
+                                <div class="form-text">Give your will a descriptive title</div>
+                                <div class="invalid-feedback">Please provide a title for your will.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="testatorName" class="form-label fw-semibold text-gray-700">
+                                    <i class="bi bi-person me-2 text-primary"></i>Your Full Name
+                                </label>
+                                <div class="input-group-icon">
+                                    <input type="text" class="form-control" id="testatorName" name="testator_name"
+                                           placeholder="Enter your full legal name" required>
+                                    <i class="bi bi-person input-icon"></i>
+                                </div>
+                                <div class="form-text">Use your complete legal name</div>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-2">
+                            <div class="col-12">
+                                <label for="testatorAddress" class="form-label fw-semibold text-gray-700">
+                                    <i class="bi bi-geo-alt me-2 text-primary"></i>Address
+                                </label>
+                                <div class="input-group-icon">
+                                    <textarea class="form-control" id="testatorAddress" name="testator_address"
+                                              rows="3" placeholder="Enter your complete address including city, state, and ZIP code" required></textarea>
+                                    <i class="bi bi-geo-alt input-icon"></i>
+                                </div>
+                                <div class="form-text">Include street address, city, state, and ZIP code</div>
+                                <div class="invalid-feedback">Please enter your address.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorCity" class="form-label">City</label>
+                                <input type="text" class="form-control" id="testatorCity" name="testator_city" required>
+                                <div class="invalid-feedback">Please enter your city.</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorState" class="form-label">State</label>
+                                <input type="text" class="form-control" id="testatorState" name="testator_state" required>
+                                <div class="invalid-feedback">Please enter your state.</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorZip" class="form-label">ZIP Code</label>
+                                <input type="text" class="form-control" id="testatorZip" name="testator_zip" required>
+                                <div class="invalid-feedback">Please enter your ZIP code.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Executor Information -->
+                <div class="card mb-4 form-step d-none" data-step="2">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>Step 2: Executor Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            An executor is the person who will carry out the instructions in your will.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="executorName" class="form-label">Executor's Full Name</label>
+                                <input type="text" class="form-control" id="executorName" name="executor_name" 
+                                       placeholder="Enter executor's full name" required>
+                                <div class="invalid-feedback">Please enter the executor's name.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="executorRelationship" class="form-label">Relationship to You</label>
+                                <input type="text" class="form-control" id="executorRelationship" name="executor_relationship" 
+                                       placeholder="e.g., Spouse, Child, Friend" required>
+                                <div class="invalid-feedback">Please specify your relationship to the executor.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="executorAddress" class="form-label">Executor's Address</label>
+                            <textarea class="form-control" id="executorAddress" name="executor_address" 
+                                      rows="2" placeholder="Enter executor's full address" required></textarea>
+                            <div class="invalid-feedback">Please enter the executor's address.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Beneficiaries -->
+                <div class="card mb-4 form-step d-none" data-step="3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Step 3: Beneficiaries</h5>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addBeneficiary()">
+                            <i class="bi bi-plus"></i> Add Beneficiary
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Beneficiaries are the people who will inherit your assets.
+                        </div>
+
+                        <div id="beneficiariesContainer">
+                            <!-- Beneficiaries will be added here dynamically -->
+                        </div>
+
+                        <div class="text-center" id="noBeneficiaries">
+                            <p class="text-muted">No beneficiaries added yet.</p>
+                            <button type="button" class="btn btn-outline-primary" onclick="addBeneficiary()">
+                                <i class="bi bi-plus-circle me-2"></i>Add Your First Beneficiary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Assets and Bequests -->
+                <div class="card mb-4 form-step d-none" data-step="4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-bank me-2"></i>Step 4: Assets and Bequests</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="assetsDescription" class="form-label">Description of Assets</label>
+                            <textarea class="form-control" id="assetsDescription" name="assets_description"
+                                      rows="4" placeholder="Describe your assets (property, bank accounts, investments, etc.)"></textarea>
+                            <div class="form-text">List your major assets that you want to include in your will.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="specificBequests" class="form-label">Specific Bequests</label>
+                            <textarea class="form-control" id="specificBequests" name="specific_bequests"
+                                      rows="4" placeholder="Any specific items or amounts you want to leave to particular people"></textarea>
+                            <div class="form-text">Specify any particular items or amounts for specific beneficiaries.</div>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="isCompleted" name="is_completed">
+                            <label class="form-check-label" for="isCompleted">
+                                Mark this will as completed
+                            </label>
+                            <div class="form-text">Check this if you've finished creating your will and it's ready for use.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" disabled>
+                        <i class="bi bi-arrow-left me-2"></i>Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                        Next<i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                    <button type="submit" class="btn btn-success d-none" id="submitBtn">
+                        <i class="bi bi-check-circle me-2"></i>Save Will
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+let beneficiaryCount = 0;
+
+function updateProgressBar() {
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+}
+
+function showStep(step) {
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(el => {
+        el.classList.add('d-none');
+    });
+
+    // Show current step
+    document.querySelector(`[data-step="${step}"]`).classList.remove('d-none');
+
+    // Update navigation buttons
+    document.getElementById('prevBtn').disabled = step === 1;
+
+    if (step === totalSteps) {
+        document.getElementById('nextBtn').classList.add('d-none');
+        document.getElementById('submitBtn').classList.remove('d-none');
+    } else {
+        document.getElementById('nextBtn').classList.remove('d-none');
+        document.getElementById('submitBtn').classList.add('d-none');
+    }
+
+    updateProgressBar();
+}
+
+function changeStep(direction) {
+    const newStep = currentStep + direction;
+
+    if (newStep >= 1 && newStep <= totalSteps) {
+        // Validate current step before moving
+        if (direction > 0 && !validateCurrentStep()) {
+            return;
+        }
+
+        currentStep = newStep;
+        showStep(currentStep);
+    }
+}
+
+function validateCurrentStep() {
+    const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+    const inputs = currentStepElement.querySelectorAll('input[required], textarea[required]');
+    let isValid = true;
+
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+
+    return isValid;
+}
+
+function addBeneficiary() {
+    beneficiaryCount++;
+    const container = document.getElementById('beneficiariesContainer');
+    const noBeneficiaries = document.getElementById('noBeneficiaries');
+
+    const beneficiaryHtml = `
+        <div class="card mb-3 beneficiary-card" data-beneficiary="${beneficiaryCount}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Beneficiary ${beneficiaryCount}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeBeneficiary(${beneficiaryCount})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control beneficiary-name" placeholder="Enter beneficiary's full name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Relationship</label>
+                        <input type="text" class="form-control beneficiary-relationship" placeholder="e.g., Son, Daughter, Friend" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bequest/Inheritance</label>
+                    <textarea class="form-control beneficiary-bequest" rows="2" placeholder="What will this person inherit?" required></textarea>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('beforeend', beneficiaryHtml);
+    noBeneficiaries.style.display = 'none';
+}
+
+function removeBeneficiary(id) {
+    document.querySelector(`[data-beneficiary="${id}"]`).remove();
+
+    // Show "no beneficiaries" message if none left
+    const remaining = document.querySelectorAll('.beneficiary-card');
+    if (remaining.length === 0) {
+        document.getElementById('noBeneficiaries').style.display = 'block';
+    }
+}
+
+function collectBeneficiaries() {
+    const beneficiaries = [];
+    document.querySelectorAll('.beneficiary-card').forEach(card => {
+        const name = card.querySelector('.beneficiary-name').value;
+        const relationship = card.querySelector('.beneficiary-relationship').value;
+        const bequest = card.querySelector('.beneficiary-bequest').value;
+
+        if (name && relationship && bequest) {
+            beneficiaries.push({ name, relationship, bequest });
+        }
+    });
+    return beneficiaries;
+}
+
+// Form submission
+document.getElementById('willForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    data.beneficiaries = collectBeneficiaries();
+    data.is_completed = document.getElementById('isCompleted').checked;
+
+    fetch('/will/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Will saved successfully!');
+            window.location.href = '/dashboard';
+        } else {
+            alert('Error saving will: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving will');
+    });
+});
+
+// Initialize
+showStep(1);
+</script>
+{% endblock %}

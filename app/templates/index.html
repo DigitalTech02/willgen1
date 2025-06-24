@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<section class="hero-section py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh;">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="fade-in">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-white bg-opacity-20 rounded-circle p-3 me-3">
+                            <i class="bi bi-shield-check fs-2 text-white"></i>
+                        </div>
+                        <span class="badge bg-white bg-opacity-20 text-white px-3 py-2 rounded-pill">
+                            Trusted by thousands
+                        </span>
+                    </div>
+                    <h1 class="display-3 fw-bold text-white mb-4">
+                        Create Your Will with
+                        <span class="text-warning">Confidence</span>
+                    </h1>
+                    <p class="lead text-white mb-5 opacity-90">
+                        Secure your family's future with our easy-to-use digital will generator.
+                        Professional, legally-structured documents created in minutes, not hours.
+                    </p>
+                    {% if current_user.is_authenticated %}
+                    <div class="d-flex flex-column flex-md-row gap-3">
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-light btn-lg px-5 py-3 shadow-lg">
+                            <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                        </a>
+                        <a href="{{ url_for('main.create_will') }}" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="bi bi-plus-circle me-2"></i>Create New Will
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="d-flex flex-column flex-md-row gap-3">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-5 py-3 shadow-lg pulse-hover">
+                            <i class="bi bi-google me-2"></i>Login with Google
+                        </a>
+                        <a href="{{ url_for('auth.demo_login') }}" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="bi bi-play-circle me-2"></i>Try Demo
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="slide-in">
+                    <div class="position-relative">
+                        <i class="bi bi-file-text display-1 text-white opacity-75"></i>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <div class="bg-success rounded-circle p-2 position-absolute" style="top: -40px; right: -30px;">
+                                <i class="bi bi-check text-white"></i>
+                            </div>
+                            <div class="bg-warning rounded-circle p-2 position-absolute" style="bottom: -40px; left: -30px;">
+                                <i class="bi bi-star text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section with Light Colors -->
+<section class="py-5" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="fade-in">
+                    <h2 class="display-5 fw-bold text-gray-800 mb-3">Why Choose WillGen?</h2>
+                    <p class="lead text-gray-600">
+                        Our platform combines legal expertise with modern technology to make will creation simple and secure.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm card-hover" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
+                    <div class="card-body text-center p-5">
+                        <div class="bg-primary-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-2 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 text-primary-800">Secure & Private</h4>
+                        <p class="text-primary-700">Your personal information is encrypted and stored securely. Only you have access to your will documents.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm card-hover" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);">
+                    <div class="card-body text-center p-5">
+                        <div class="bg-success-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightning-charge fs-2 text-success-600"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 text-success-800">Quick & Easy</h4>
+                        <p class="text-success-700">Create a comprehensive will in minutes with our guided step-by-step process.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm card-hover" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+                    <div class="card-body text-center p-5">
+                        <div class="bg-amber-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                            <i class="bi bi-file-earmark-pdf fs-2 text-amber-600"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3 text-amber-800">Professional Format</h4>
+                        <p class="text-amber-700">Generate professionally formatted PDF documents ready for legal use and notarization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">Creating your will is simple with our three-step process.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                    <span class="fw-bold">1</span>
+                </div>
+                <h4 class="fw-bold mb-3">Sign In</h4>
+                <p class="text-muted">Securely log in with your Google account to get started.</p>
+            </div>
+            
+            <div class="col-md-4 text-center">
+                <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                    <span class="fw-bold">2</span>
+                </div>
+                <h4 class="fw-bold mb-3">Fill Details</h4>
+                <p class="text-muted">Complete the guided form with your personal information, beneficiaries, and wishes.</p>
+            </div>
+            
+            <div class="col-md-4 text-center">
+                <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                    <span class="fw-bold">3</span>
+                </div>
+                <h4 class="fw-bold mb-3">Download</h4>
+                <p class="text-muted">Generate and download your professionally formatted will as a PDF document.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not current_user.is_authenticated %}
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+                <p class="lead mb-4">Join thousands of users who have secured their family's future with WillGen.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-4 me-md-2">
+                        <i class="bi bi-google me-2"></i>Login with Google
+                    </a>
+                    <a href="{{ url_for('auth.demo_login') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-play-circle me-2"></i>Try Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

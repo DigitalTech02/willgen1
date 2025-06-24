@@ -1,0 +1,221 @@
+{% extends "will/wizard/base_wizard.html" %}
+
+{% block wizard_title %}Step 5: Special Instructions{% endblock %}
+{% block wizard_subtitle %}Add your personal wishes and special instructions{% endblock %}
+
+{% block wizard_content %}
+<form id="wizard-form" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <!-- Funeral and Burial Wishes -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-heart me-2"></i>Funeral & Burial Wishes</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.burial_cremation_wishes.label(class="form-label") }}
+                    {{ form.burial_cremation_wishes(class="form-select" + (" is-invalid" if form.burial_cremation_wishes.errors else "")) }}
+                    {% if form.burial_cremation_wishes.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.burial_cremation_wishes.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.funeral_wishes.label(class="form-label") }}
+                {{ form.funeral_wishes(class="form-control" + (" is-invalid" if form.funeral_wishes.errors else "")) }}
+                {% if form.funeral_wishes.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.funeral_wishes.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">Describe your preferences for funeral services, memorial services, or celebrations of life.</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="burial_cremation_details" class="form-label">Burial/Cremation Details</label>
+                <textarea class="form-control" id="burial_cremation_details" name="burial_cremation_details" rows="3" 
+                          placeholder="Specific instructions for burial, cremation, or body donation"></textarea>
+                <div class="form-text">Include specific cemetery preferences, cremation instructions, or body donation wishes.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guardian for Minor Children -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-people me-2"></i>Guardian for Minor Children</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                If you have minor children, it's crucial to name a guardian who will care for them if both parents are unable to do so.
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.guardian_minor_children.label(class="form-label") }}
+                    {{ form.guardian_minor_children(class="form-control" + (" is-invalid" if form.guardian_minor_children.errors else "")) }}
+                    {% if form.guardian_minor_children.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.guardian_minor_children.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.guardian_address.label(class="form-label") }}
+                {{ form.guardian_address(class="form-control" + (" is-invalid" if form.guardian_address.errors else "")) }}
+                {% if form.guardian_address.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.guardian_address.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Charitable Donations -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-gift me-2"></i>Charitable Donations</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addCharity()">
+                <i class="bi bi-plus-circle me-1"></i>Add Charity
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                <i class="bi bi-heart me-2"></i>
+                <strong>Leave a legacy</strong> by including charitable donations in your will. 
+                These gifts can provide tax benefits for your estate and support causes you care about.
+            </div>
+            
+            <div id="charities-container">
+                {% for charity in form.charitable_donations %}
+                <div class="dynamic-form-section">
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn" onclick="removeCharity(this)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ charity.charity_name.label(class="form-label") }}
+                            {{ charity.charity_name(class="form-control") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ charity.donation_amount.label(class="form-label") }}
+                            {{ charity.donation_amount(class="form-control") }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ charity.charity_address.label(class="form-label") }}
+                        {{ charity.charity_address(class="form-control") }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ charity.purpose.label(class="form-label") }}
+                        {{ charity.purpose(class="form-control") }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if form.charitable_donations|length == 0 %}
+            <div class="text-center py-3" id="no-charities">
+                <p class="text-muted">No charitable donations specified. Click "Add Charity" to include charitable giving in your will.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Additional Special Instructions -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>Additional Special Instructions</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                {{ form.special_instructions.label(class="form-label") }}
+                {{ form.special_instructions(class="form-control" + (" is-invalid" if form.special_instructions.errors else "")) }}
+                {% if form.special_instructions.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.special_instructions.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">
+                    Include any other special wishes, instructions for specific items, messages to loved ones, 
+                    or other important information not covered elsewhere.
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let charityCount = {{ form.charitable_donations|length }};
+
+function addCharity() {
+    const container = document.getElementById('charities-container');
+    const noCharities = document.getElementById('no-charities');
+    
+    if (noCharities) {
+        noCharities.style.display = 'none';
+    }
+    
+    const charityHtml = `
+        <div class="dynamic-form-section">
+            <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn" onclick="removeCharity(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Charity/Organization Name</label>
+                    <input type="text" class="form-control" name="charitable_donations-${charityCount}-charity_name" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Donation Amount/Percentage</label>
+                    <input type="text" class="form-control" name="charitable_donations-${charityCount}-donation_amount" 
+                           placeholder="e.g., $5,000 or 10% of estate">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Charity Address</label>
+                <textarea class="form-control" name="charitable_donations-${charityCount}-charity_address" rows="2"></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Purpose/Instructions</label>
+                <textarea class="form-control" name="charitable_donations-${charityCount}-purpose" rows="2" 
+                          placeholder="Specific purpose for the donation (optional)"></textarea>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', charityHtml);
+    charityCount++;
+}
+
+function removeCharity(button) {
+    const charityDiv = button.closest('.dynamic-form-section');
+    charityDiv.remove();
+    
+    const remaining = document.querySelectorAll('#charities-container .dynamic-form-section');
+    if (remaining.length === 0) {
+        const noCharities = document.getElementById('no-charities');
+        if (noCharities) {
+            noCharities.style.display = 'block';
+        }
+    }
+}
+</script>
+{% endblock %}

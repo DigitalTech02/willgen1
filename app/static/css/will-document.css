@@ -1,0 +1,319 @@
+/* Will Document Styling */
+
+/* Print-specific styles */
+@media print {
+    .no-print { 
+        display: none !important; 
+    }
+    
+    .page-break { 
+        page-break-before: always; 
+    }
+    
+    body { 
+        font-size: 12pt; 
+        line-height: 1.4; 
+        color: #000;
+        background: white;
+    }
+    
+    .container, .container-fluid { 
+        max-width: none; 
+        margin: 0; 
+        padding: 0; 
+    }
+    
+    .will-document {
+        box-shadow: none;
+        margin: 0;
+        padding: 0.5in;
+    }
+    
+    .action-buttons {
+        display: none !important;
+    }
+}
+
+/* Screen styles */
+.will-document {
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 8.5in;
+    min-height: 11in;
+    padding: 1in;
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #000;
+}
+
+.will-header {
+    text-align: center;
+    border-bottom: 3px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.will-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.will-section {
+    margin-bottom: 30px;
+    page-break-inside: avoid;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #666;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.legal-text {
+    text-align: justify;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    text-indent: 0;
+}
+
+.signature-section {
+    margin-top: 50px;
+    page-break-inside: avoid;
+}
+
+.signature-line {
+    border-bottom: 1px solid #333;
+    margin: 30px 0 10px 0;
+    height: 1px;
+    width: 300px;
+}
+
+.witness-section {
+    margin-top: 40px;
+}
+
+.date-location {
+    text-align: right;
+    font-style: italic;
+    margin-bottom: 20px;
+    font-size: 11pt;
+}
+
+.beneficiary-item, .asset-item {
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+}
+
+.action-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Legal document formatting */
+.legal-paragraph {
+    text-indent: 2em;
+    margin-bottom: 1em;
+}
+
+.legal-clause {
+    margin-left: 2em;
+    margin-bottom: 1em;
+}
+
+.legal-subclause {
+    margin-left: 4em;
+    margin-bottom: 0.5em;
+}
+
+/* Witness and signature formatting */
+.witness-block {
+    margin-top: 2em;
+    page-break-inside: avoid;
+}
+
+.signature-block {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.signature-date {
+    margin-top: 2em;
+    text-align: center;
+}
+
+/* Professional table styling for assets/beneficiaries */
+.will-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5em;
+}
+
+.will-table th,
+.will-table td {
+    border: 1px solid #333;
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.will-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .will-document { 
+        margin: 10px; 
+        padding: 20px; 
+        font-size: 11pt;
+    }
+    
+    .action-buttons { 
+        position: relative; 
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .will-title {
+        font-size: 20px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+    }
+}
+
+/* Badge styling for contingent/alternate labels */
+.will-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 9pt;
+    font-weight: bold;
+    background: #666;
+    color: white;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+.will-badge.contingent {
+    background: #ffc107;
+    color: #000;
+}
+
+.will-badge.alternate {
+    background: #6c757d;
+    color: white;
+}
+
+/* Footer styling */
+.will-footer {
+    margin-top: 3em;
+    padding-top: 1em;
+    border-top: 1px solid #ccc;
+    text-align: center;
+    font-size: 10pt;
+    color: #666;
+}
+
+/* Emphasis and highlighting */
+.will-emphasis {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.will-important {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+/* Page numbering for print */
+@page {
+    margin: 1in;
+    
+    @bottom-center {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 10pt;
+        color: #666;
+    }
+    
+    @top-right {
+        content: "Last Will and Testament";
+        font-size: 10pt;
+        color: #666;
+    }
+}
+
+/* Ensure proper spacing and formatting */
+.will-section:last-child {
+    margin-bottom: 0;
+}
+
+.legal-text:last-child {
+    margin-bottom: 0;
+}
+
+/* Special formatting for specific sections */
+.testator-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .testator-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+/* Ensure readability */
+strong {
+    font-weight: 700;
+}
+
+em {
+    font-style: italic;
+}
+
+/* Clean list styling */
+.will-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.will-list li {
+    margin-bottom: 0.5em;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+.will-list li:before {
+    content: "• ";
+    font-weight: bold;
+    margin-right: 0.5em;
+}

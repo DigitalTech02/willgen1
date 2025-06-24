@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Will - WillGen{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h1 class="display-5 fw-bold">Edit Will</h1>
+                    <p class="lead text-muted">Update your will information below.</p>
+                </div>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Will Form -->
+            <form id="editWillForm" class="needs-validation" novalidate>
+                <input type="hidden" id="willId" value="{{ will.id }}">
+                
+                <!-- Personal Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-person me-2"></i>Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="willTitle" class="form-label">Will Title</label>
+                                <input type="text" class="form-control" id="willTitle" name="title" 
+                                       value="{{ will.title or '' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="testatorName" class="form-label">Your Full Name</label>
+                                <input type="text" class="form-control" id="testatorName" name="testator_name" 
+                                       value="{{ will.testator_name or '' }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="testatorAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="testatorAddress" name="testator_address" 
+                                      rows="2" required>{{ will.testator_address or '' }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorCity" class="form-label">City</label>
+                                <input type="text" class="form-control" id="testatorCity" name="testator_city" 
+                                       value="{{ will.testator_city or '' }}" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorState" class="form-label">State</label>
+                                <input type="text" class="form-control" id="testatorState" name="testator_state" 
+                                       value="{{ will.testator_state or '' }}" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="testatorZip" class="form-label">ZIP Code</label>
+                                <input type="text" class="form-control" id="testatorZip" name="testator_zip" 
+                                       value="{{ will.testator_zip or '' }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executor Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>Executor Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="executorName" class="form-label">Executor's Full Name</label>
+                                <input type="text" class="form-control" id="executorName" name="executor_name" 
+                                       value="{{ will.executor_name or '' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="executorRelationship" class="form-label">Relationship to You</label>
+                                <input type="text" class="form-control" id="executorRelationship" name="executor_relationship" 
+                                       value="{{ will.executor_relationship or '' }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="executorAddress" class="form-label">Executor's Address</label>
+                            <textarea class="form-control" id="executorAddress" name="executor_address" 
+                                      rows="2" required>{{ will.executor_address or '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beneficiaries -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Beneficiaries</h5>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addBeneficiary()">
+                            <i class="bi bi-plus"></i> Add Beneficiary
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="beneficiariesContainer">
+                            <!-- Existing beneficiaries will be loaded here -->
+                        </div>
+                        
+                        <div class="text-center" id="noBeneficiaries" style="display: none;">
+                            <p class="text-muted">No beneficiaries added yet.</p>
+                            <button type="button" class="btn btn-outline-primary" onclick="addBeneficiary()">
+                                <i class="bi bi-plus-circle me-2"></i>Add Your First Beneficiary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assets and Bequests -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-bank me-2"></i>Assets and Bequests</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="assetsDescription" class="form-label">Description of Assets</label>
+                            <textarea class="form-control" id="assetsDescription" name="assets_description" 
+                                      rows="4">{{ will.assets_description or '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="specificBequests" class="form-label">Specific Bequests</label>
+                            <textarea class="form-control" id="specificBequests" name="specific_bequests" 
+                                      rows="4">{{ will.specific_bequests or '' }}</textarea>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="isCompleted" name="is_completed" 
+                                   {{ 'checked' if will.is_completed else '' }}>
+                            <label class="form-check-label" for="isCompleted">
+                                Mark this will as completed
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between">
+                    <div>
+                        {% if will.is_completed %}
+                        <a href="{{ url_for('main.download_will_pdf', will_id=will.id) }}" class="btn btn-success">
+                            <i class="bi bi-download me-2"></i>Download PDF
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary me-2" onclick="window.history.back()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let beneficiaryCount = 0;
+const existingBeneficiaries = {{ beneficiaries | tojson }};
+
+function addBeneficiary(name = '', relationship = '', bequest = '') {
+    beneficiaryCount++;
+    const container = document.getElementById('beneficiariesContainer');
+    const noBeneficiaries = document.getElementById('noBeneficiaries');
+
+    const beneficiaryHtml = `
+        <div class="card mb-3 beneficiary-card" data-beneficiary="${beneficiaryCount}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Beneficiary ${beneficiaryCount}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeBeneficiary(${beneficiaryCount})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control beneficiary-name" value="${name}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Relationship</label>
+                        <input type="text" class="form-control beneficiary-relationship" value="${relationship}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bequest/Inheritance</label>
+                    <textarea class="form-control beneficiary-bequest" rows="2" required>${bequest}</textarea>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('beforeend', beneficiaryHtml);
+    noBeneficiaries.style.display = 'none';
+}
+
+function removeBeneficiary(id) {
+    document.querySelector(`[data-beneficiary="${id}"]`).remove();
+
+    // Show "no beneficiaries" message if none left
+    const remaining = document.querySelectorAll('.beneficiary-card');
+    if (remaining.length === 0) {
+        document.getElementById('noBeneficiaries').style.display = 'block';
+    }
+}
+
+function collectBeneficiaries() {
+    const beneficiaries = [];
+    document.querySelectorAll('.beneficiary-card').forEach(card => {
+        const name = card.querySelector('.beneficiary-name').value;
+        const relationship = card.querySelector('.beneficiary-relationship').value;
+        const bequest = card.querySelector('.beneficiary-bequest').value;
+
+        if (name && relationship && bequest) {
+            beneficiaries.push({ name, relationship, bequest });
+        }
+    });
+    return beneficiaries;
+}
+
+// Load existing beneficiaries
+function loadExistingBeneficiaries() {
+    if (existingBeneficiaries && existingBeneficiaries.length > 0) {
+        existingBeneficiaries.forEach(beneficiary => {
+            addBeneficiary(beneficiary.name || '', beneficiary.relationship || '', beneficiary.bequest || '');
+        });
+    } else {
+        document.getElementById('noBeneficiaries').style.display = 'block';
+    }
+}
+
+// Form submission
+document.getElementById('editWillForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    data.id = document.getElementById('willId').value;
+    data.beneficiaries = collectBeneficiaries();
+    data.is_completed = document.getElementById('isCompleted').checked;
+
+    fetch('/will/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Will updated successfully!');
+            window.location.href = '/dashboard';
+        } else {
+            alert('Error updating will: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating will');
+    });
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadExistingBeneficiaries();
+});
+</script>
+{% endblock %}

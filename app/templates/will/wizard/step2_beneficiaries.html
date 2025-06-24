@@ -1,0 +1,229 @@
+{% extends "will/wizard/base_wizard.html" %}
+
+{% block wizard_title %}Step 2: Beneficiaries{% endblock %}
+{% block wizard_subtitle %}Specify who will inherit your assets{% endblock %}
+
+{% block wizard_content %}
+<form id="wizard-form" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-people me-2"></i>Your Beneficiaries</h5>
+            <button type="button" class="btn btn-sm btn-primary" onclick="addBeneficiary()">
+                <i class="bi bi-plus-circle me-1"></i>Add Beneficiary
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Beneficiaries</strong> are the people or organizations who will inherit your assets. 
+                You can specify percentages, specific amounts, or particular items for each beneficiary.
+            </div>
+            
+            <div id="beneficiaries-container">
+                <!-- Simple Static Form -->
+                <div class="dynamic-form-section" data-beneficiary-index="0">
+                    <h6 class="text-primary mb-3">
+                        <i class="bi bi-person me-2"></i>Primary Beneficiary
+                    </h6>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="beneficiary-name">Full Name *</label>
+                            <input type="text" class="form-control" id="beneficiary-name" name="beneficiary-name"
+                                   value="{{ beneficiary_data.get('name', '') if beneficiary_data else '' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="beneficiary-relationship">Relationship</label>
+                            <input type="text" class="form-control" id="beneficiary-relationship" name="beneficiary-relationship"
+                                   value="{{ beneficiary_data.get('relationship', '') if beneficiary_data else '' }}"
+                                   placeholder="e.g., Spouse, Child, Friend">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="beneficiary-percentage">Inheritance Share</label>
+                            <input type="text" class="form-control" id="beneficiary-percentage" name="beneficiary-percentage"
+                                   value="{{ beneficiary_data.get('percentage', '') if beneficiary_data else '' }}"
+                                   placeholder="e.g., 50%, $10,000, Equal share">
+                            <div class="form-text">e.g., "25%", "$10,000", or "Equal share"</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" class="form-check-input" id="beneficiary-contingent" name="beneficiary-contingent"
+                                       {% if beneficiary_data and beneficiary_data.get('contingent') %}checked{% endif %}>
+                                <label class="form-check-label" for="beneficiary-contingent">Contingent Beneficiary</label>
+                                <div class="form-text">Contingent beneficiaries inherit if primary beneficiaries cannot.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="beneficiary-address">Address</label>
+                        <textarea class="form-control" id="beneficiary-address" name="beneficiary-address" rows="2"
+                                  placeholder="Full address of the beneficiary">{{ beneficiary_data.get('address', '') if beneficiary_data else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="beneficiary-bequest">Specific Bequest</label>
+                        <textarea class="form-control" id="beneficiary-bequest" name="beneficiary-bequest" rows="2"
+                                  placeholder="Specific items, property, or instructions for this beneficiary">{{ beneficiary_data.get('specific_bequest', '') if beneficiary_data else '' }}</textarea>
+                        <div class="form-text">Specific items, property, or instructions for this beneficiary.</div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if form.beneficiaries|length == 0 %}
+            <div class="text-center py-4" id="no-beneficiaries">
+                <i class="bi bi-people display-1 text-muted mb-3"></i>
+                <h5 class="text-muted">No beneficiaries added yet</h5>
+                <p class="text-muted">Click "Add Beneficiary" to start adding people who will inherit your assets.</p>
+            </div>
+            {% endif %}
+            
+            <button type="button" class="add-item-btn" onclick="addBeneficiary()">
+                <i class="bi bi-plus-circle me-2"></i>Add Another Beneficiary
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Beneficiary Template (hidden) -->
+<div id="beneficiary-template" style="display: none;">
+    <div class="dynamic-form-section" data-beneficiary-index="">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn" 
+                onclick="removeBeneficiary(this)">
+            <i class="bi bi-trash"></i>
+        </button>
+        
+        <h6 class="text-primary mb-3">
+            <i class="bi bi-person me-2"></i>Beneficiary <span class="beneficiary-number"></span>
+        </h6>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" name="beneficiaries-__INDEX__-name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Relationship to You</label>
+                <input type="text" class="form-control" name="beneficiaries-__INDEX__-relationship" required>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Percentage of Estate</label>
+                <input type="text" class="form-control" name="beneficiaries-__INDEX__-percentage" 
+                       placeholder="e.g., 25% or $10,000">
+                <div class="form-text">e.g., "25%", "$10,000", or "Equal share"</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+                    <input type="checkbox" class="form-check-input" name="beneficiaries-__INDEX__-contingent">
+                    <label class="form-check-label">Contingent Beneficiary</label>
+                    <div class="form-text">Contingent beneficiaries inherit if primary beneficiaries cannot.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea class="form-control" name="beneficiaries-__INDEX__-address" rows="2"></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Specific Items/Instructions</label>
+            <textarea class="form-control" name="beneficiaries-__INDEX__-specific_bequest" rows="3"></textarea>
+            <div class="form-text">Specific items, property, or instructions for this beneficiary.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let beneficiaryCount = {{ form.beneficiaries|length }};
+
+function addBeneficiary() {
+    const container = document.getElementById('beneficiaries-container');
+    const template = document.getElementById('beneficiary-template');
+    const noBeneficiaries = document.getElementById('no-beneficiaries');
+    
+    // Hide "no beneficiaries" message
+    if (noBeneficiaries) {
+        noBeneficiaries.style.display = 'none';
+    }
+    
+    // Clone template
+    const newBeneficiary = template.cloneNode(true);
+    newBeneficiary.style.display = 'block';
+    newBeneficiary.id = '';
+    
+    // Update indices and names
+    const html = newBeneficiary.innerHTML.replace(/__INDEX__/g, beneficiaryCount);
+    newBeneficiary.innerHTML = html;
+    newBeneficiary.querySelector('[data-beneficiary-index]').setAttribute('data-beneficiary-index', beneficiaryCount);
+    newBeneficiary.querySelector('.beneficiary-number').textContent = beneficiaryCount + 1;
+    
+    // Add to container
+    container.appendChild(newBeneficiary);
+    beneficiaryCount++;
+    
+    // Update form field names for Flask-WTF
+    updateFieldNames();
+}
+
+function removeBeneficiary(button) {
+    const beneficiaryDiv = button.closest('.dynamic-form-section');
+    beneficiaryDiv.remove();
+    
+    // Show "no beneficiaries" message if none left
+    const remaining = document.querySelectorAll('#beneficiaries-container .dynamic-form-section');
+    if (remaining.length === 0) {
+        const noBeneficiaries = document.getElementById('no-beneficiaries');
+        if (noBeneficiaries) {
+            noBeneficiaries.style.display = 'block';
+        }
+    }
+    
+    // Renumber remaining beneficiaries
+    renumberBeneficiaries();
+    updateFieldNames();
+}
+
+function renumberBeneficiaries() {
+    const beneficiaries = document.querySelectorAll('#beneficiaries-container .dynamic-form-section');
+    beneficiaries.forEach((beneficiary, index) => {
+        const numberSpan = beneficiary.querySelector('.beneficiary-number');
+        if (numberSpan) {
+            numberSpan.textContent = index + 1;
+        }
+        beneficiary.setAttribute('data-beneficiary-index', index);
+    });
+    beneficiaryCount = beneficiaries.length;
+}
+
+function updateFieldNames() {
+    const beneficiaries = document.querySelectorAll('#beneficiaries-container .dynamic-form-section');
+    beneficiaries.forEach((beneficiary, index) => {
+        const inputs = beneficiary.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            const name = input.name;
+            if (name && name.includes('beneficiaries-')) {
+                const fieldName = name.split('-').pop();
+                input.name = `beneficiaries-${index}-${fieldName}`;
+                input.id = `beneficiaries-${index}-${fieldName}`;
+            }
+        });
+    });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateFieldNames();
+});
+</script>
+{% endblock %}
