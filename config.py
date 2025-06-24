@@ -7,7 +7,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     """Base configuration class."""
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'ZV8K0R_WL1yWEunNo57LY3yIA7Uf2UWWufgZYjLi9og'
 
     # Force SQLite for development - override any system DATABASE_URL
     database_url = os.environ.get('DATABASE_URL', '')
